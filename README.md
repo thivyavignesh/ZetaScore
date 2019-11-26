@@ -1,5 +1,7 @@
 # ZetaScore
-Finding Bad actors in Blockchain
+Finding Bad actors in Blockchain.
+
+This repository contains the solidity smart contract that stores and retrieves the history of Zeta scores for nodes on chain.
 
 ## Info
 Winner - Viterbi Graduate Hackathon 2019
