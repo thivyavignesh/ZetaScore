@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<script src="web3.js"></script>
+
+</head>
+
+<body>
+
+	<div class="in">
+		<input id="addr" type="text">
+		<input id="zet" type="text">
+		<button id="updatescore">Update Zeta Score</button>
+	</div>
+
+	<div class="out">
+		<input id="addre" type="text">
+		<textarea id="area"></textarea>
+		<button id="showhistory">Show History</button>
+	</div>
+
+<script>
+		console.log("0x6330A553Fc93768F612722BB8c2eC78aC90B3bbc".toLowerCase());
+       if (typeof web3 !== 'undefined') {
+           web3 = new Web3(web3.currentProvider);
+       } else {
+           web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+       }
+
+       web3.eth.defaultAccount = web3.eth.accounts[0];
+
+        var ZetaContract = web3.eth.contract([
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_address",
+				"type": "address"
+			},
+			{
+				"name": "_score",
+				"type": "string"
+			}
+		],
+		"name": "Upload",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "owner",
+		"outputs": [
+			{
+				"name": "",
+				"type": "address"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "_address",
+				"type": "address"
+			}
+		],
+		"name": "retrieve",
+		"outputs": [
+			{
+				"name": "x",
+				"type": "bytes"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "",
+				"type": "address"
+			},
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "score",
+		"outputs": [
+			{
+				"name": "",
+				"type": "string"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	}
+]);
+
+       var Zeta = ZetaContract.at('0x7528533baad6a936f2952b0e844eec2a1cb1d6f1');
+		console.log(Zeta);
+
+       
+       
+
+       $("#updatescore").click(function() { 
+           Zeta.Upload.sendTransaction( $("#addr").val(), $("#zet").val(), {
+            from:web3.eth.accounts[0],
+            gas:4000000}, (err, res) => {
+               if (err) {
+                   console.log("error in Upload!")
+               }
+           });      
+        });
+
+	   $("#showhistory").click(function() {
+			Zeta.retrieve($("#addre").val(),(err, res) => {
+               if (err) {
+                   console.log("error in Retrieve!")
+               }
+               if (res) {
+
+               		var str = '';
+					for (var i = 0; i < res.length; i += 2) {
+					   var v = parseInt(res.substr(i, 2), 16);
+					   if (v) str += String.fromCharCode(v);
+					}
+
+				  	params = [];
+					result = "";
+					for (var i=0; i<= str.length; i++){
+						if(str.charCodeAt(i) > 31){
+							result = result + str[i];
+						}
+						else{
+							params.push(result);
+							result = "";
+						}
+					}
+					params.pop();
+
+
+             	document.getElementById("area").value=String.join(params, '\n');;
+             	}
+            });
+			//out = out + '\n' + PNB.getLoanees().toString();
+            
+		  
+       });
+
+</script> 
+
+</body>
+
+</html>
