@@ -10,3 +10,6 @@ Devpost Link - https://devpost.com/software/zeta
 ## Library
 Seriality library used from: https://github.com/pouladzade/Seriality
 
+## Extended Works
+Refer to: https://github.com/zeta-score
+
